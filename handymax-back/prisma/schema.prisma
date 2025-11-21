@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// Роли пользователей
+enum Role {
+  USER
+  ADMIN
+}
+
+// Статусы заказов
+enum OrderStatus {
+  PENDING     // Новый
+  IN_PROGRESS // В работе
+  COMPLETED   // Выполнен
+  CANCELLED   // Отменен
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String
+  phone     String?
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+
+  reviews   Review[]
+  orders    Order[]
+}
+
+model Service {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  price       Float
+  imageUrl    String?  // Ссылка на фото
+  
+  reviews     Review[] // Отзывы к этой услуге
+  // Связь с позициями в заказах
+  orderItems  OrderItem[]
+}
+
+model Review {
+  id         Int      @id @default(autoincrement())
+  text       String
+  rating     Int      // 1-5
+  isApproved Boolean  @default(false) // Модерация
+  createdAt  DateTime @default(now())
+
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id])
+
+  serviceId  Int
+  service    Service  @relation(fields: [serviceId], references: [id])
+}
+
+model Order {
+  id          Int         @id @default(autoincrement())
+  createdAt   DateTime    @default(now())
+  status      OrderStatus @default(PENDING)
+  totalPrice  Float       // Фиксируем цену на момент заказа
+  
+  userId      Int
+  user        User        @relation(fields: [userId], references: [id])
+  
+  items       OrderItem[]
+}
+
+// Промежуточная таблица, так как в одном заказе может быть несколько услуг
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  quantity  Int     @default(1)
+  price     Float   // Цена услуги на момент заказа (вдруг потом подорожает)
+  
+  orderId   Int
+  order     Order   @relation(fields: [orderId], references: [id])
+  
+  serviceId Int
+  service   Service @relation(fields: [serviceId], references: [id])
+}
+
+// Блог / Рекомендации
+model Article {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String   // Можно хранить HTML или Markdown
+  imageUrl  String?
+  createdAt DateTime @default(now())
+}
+
+// Срочные вызовы (без регистрации)
+model UrgentRequest {
+  id          Int      @id @default(autoincrement())
+  name        String
+  phone       String
+  description String?
+  isProcessed Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
