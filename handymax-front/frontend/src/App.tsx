@@ -1,35 +1,75 @@
-import { useAppSelector, useAppDispatch } from './store/hooks';
-import { login, logout } from './store/slices/authSlice';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { MainLayout } from './layouts/MainLayout';
+import { HomePage } from './pages/HomePage';
+import { AboutPage } from './pages/AboutPage';
+import { ServicesPage } from './pages/ServicesPage';
+import { UserLayout } from './layouts/UserLayout';
+import { PersonalInformation } from './pages/user/PersonalInformation';
+import { OrdersPage } from './pages/user/OrdersPage';
+import { OrderDetailsPage } from './pages/user/OrderDetailsPage';
+import { CreateReviewPage } from './pages/user/CreateReviewPage';
+import { RecommendationsPage } from './pages/user/RecomendationsPage';
+import { RecommendationDetailsPage } from './pages/user/RecommendationDetailsPage';
+import { AdminAuthLayout } from './layouts/AdminAuthLayout';
+import { LogInPage } from './pages/admin/auth/LogInPage';
+import { RecoverPasswordPage } from './pages/admin/auth/RecoverPasswordPage';
+import { NewPasswordPage } from './pages/admin/auth/NewPasswordPage';
+import { SuccessfulRecoveryPage } from './pages/admin/auth/SuccessfulRecoveryPage';
+import { AdminLayout } from './layouts/AdminLayout';
+import { StatisticsPage } from './pages/admin/StatisticsPage';
+import { ServicesAdminPage } from './pages/admin/ServicesAdminPage';
+import { AboutMasterAdminPage } from './pages/admin/AboutMasterAdminPage';
+import { ReviewsAdminPage } from './pages/admin/ReviewsAdminPage';
+import { ContactsAdminPage } from './pages/admin/ContactsAdminPage';
+import { RecommendationsAdminPage } from './pages/admin/RecommendationsAdminPage';
+import { EditRecommendationPage } from './pages/admin/EditRecommendationPage';
+import { EditServicePage } from './pages/admin/EditServicePage';
 
 function App() {
-  // Читаем данные
-  const { isAuth, user } = useAppSelector((state) => state.auth);
-  const dispatch = useAppDispatch();
-
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center justify-center gap-4">
-      <h1 className="text-3xl font-bold">Redux Test</h1>
-      
-      {/* Показываем статус */}
-      <p>Status: {isAuth ? `Привет, ${user?.name}` : 'Гость'}</p>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<HomePage />} />
+          <Route path="about" element={<AboutPage />} />
+          <Route path="services" element={<ServicesPage />} />
+        </Route>
 
-      {/* Кнопки меняют состояние */}
-      <div className="flex gap-4">
-        <button 
-          className="bg-blue-500 px-4 py-2 rounded hover:bg-blue-600"
-          onClick={() => dispatch(login({ id: 1, email: 'test@test.com', name: 'Max', role: 'ADMIN' }))}
-        >
-          Войти
-        </button>
-        
-        <button 
-          className="bg-red-500 px-4 py-2 rounded hover:bg-red-600"
-          onClick={() => dispatch(logout())}
-        >
-          Выйти
-        </button>
-      </div>
-    </div>
+        <Route path="/user-panel" element={<UserLayout />}>
+            <Route index element={<Navigate to="personal-info" replace />} />
+            
+            <Route path="personal-info" element={<PersonalInformation />} />
+            <Route path="orders" element={<OrdersPage />} />
+            <Route path="order-details" element={<OrderDetailsPage />} />
+            <Route path="create-review" element={<CreateReviewPage />} />
+            <Route path="recommendations" element={<RecommendationsPage />} />
+            <Route path="recommendation-details" element={<RecommendationDetailsPage />} />
+        </Route>
+
+        <Route path="/admin-auth" element={<AdminAuthLayout />}>
+            <Route index element={<Navigate to="log-in" replace />} />
+            
+            <Route path="log-in" element={<LogInPage />} />
+            <Route path="recover-password" element={<RecoverPasswordPage />} />
+            <Route path="new-password" element={<NewPasswordPage />} />
+            <Route path="successful-recovery" element={<SuccessfulRecoveryPage />} />
+        </Route>
+
+        <Route path="/admin-panel" element={<AdminLayout />}>
+            <Route index element={<Navigate to="statistics" replace />} />
+            
+            <Route path="statistics" element={<StatisticsPage />} />
+            <Route path="services" element={<ServicesAdminPage />} />
+            <Route path="about" element={<AboutMasterAdminPage />} />
+            <Route path="reviews" element={<ReviewsAdminPage />} />
+            <Route path="contacts" element={<ContactsAdminPage />} />
+            <Route path="recommendations" element={<RecommendationsAdminPage />} />
+
+            <Route path="edit-recommendation/:id" element={<EditRecommendationPage />} />
+            <Route path="edit-service/:id" element={<EditServicePage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
