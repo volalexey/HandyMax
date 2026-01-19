@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../store/hooks';
-import { logout } from '../store/slices/authSlice';
+import { logout, openLoginModal } from '../store/slices/authSlice';
 
 import logo from '../assets/img/logo.png';
 import logoBig from '../assets/img/bigLogoWhite.png';
@@ -11,32 +11,28 @@ import burger from '../assets/img/burger.png';
 import cross from '../assets/img/cross.png';
 import profileIcon from '../assets/img/profileIcon.png';
 
-const LogInModal = ({ onClose }: { onClose: () => void }) => (
-  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100]">
-    <div className="bg-white p-8 rounded">
-      <h2>Тут будет форма входа</h2>
-      <button onClick={onClose} className="mt-4 text-red-500">Закрыть</button>
-    </div>
-  </div>
-);
-
 export const Header = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLogInModalOpen, setIsLogInModalOpen] = useState(false);
   
   const { isAuth, user } = useAppSelector((state) => state.auth);
-  const dispatch = useAppDispatch();
+
+  const dashboardPath = user?.role === 'ADMIN' ? '/admin-panel' : '/user-panel';
 
   const linkClasses = ({ isActive }: { isActive: boolean }) =>
-    `text-xl text-white hover:text-orange-500 transition-colors ${
-      isActive ? 'text-orange-500 border-b-2 border-orange-500' : ''
+    `text-2xl text-white hover:text-[#FF7420] transition-colors p-2 ${
+      isActive ? 'text-[#FF7420] border-b-2 border-[#FF7420]' : ''
     }`;
 
   return (
     <div className="bg-[#191A19] min-h-[100px] relative">
-      <div className="container mx-auto px-4 min-h-[100px] flex justify-between items-center">
+      <div className="container mx-auto px-12 min-h-[100px] flex justify-between items-center">
         
-        <img className="hidden lg:block h-16 object-contain" src={logo} alt="logo" />
+        <Link to="/">
+            <img className="hidden lg:block h-16 object-contain" src={logo} alt="logo" />
+        </Link>
 
         <img 
           onClick={() => setIsMenuOpen(true)} 
@@ -44,10 +40,13 @@ export const Header = () => {
           src={burger} 
           alt="menu" 
         />
-        <img className="lg:hidden h-12 object-contain" src={logoBig} alt="logo mobile" />
+        
+        <Link to="/" className="lg:hidden">
+            <img className="h-12 object-contain" src={logoBig} alt="logo mobile" />
+        </Link>
         
         <img 
-          onClick={() => isAuth ? alert("Переход в профиль") : setIsLogInModalOpen(true)}
+          onClick={isAuth ? () => dispatch(openLoginModal()) : () => {alert('yes')}}
           className="lg:hidden w-8 cursor-pointer" 
           src={profileIcon} 
           alt="profile" 
@@ -75,6 +74,13 @@ export const Header = () => {
             <NavLink to="/" className={linkClasses} onClick={() => setIsMenuOpen(false)}>
               Casa
             </NavLink>
+            
+            {isAuth && (
+              <NavLink to={dashboardPath} className={linkClasses} onClick={() => setIsMenuOpen(false)}>
+                Area personale
+              </NavLink>
+            )}
+
             <NavLink to="/about" className={linkClasses} onClick={() => setIsMenuOpen(false)}>
               Tuttofare
             </NavLink>
@@ -91,26 +97,27 @@ export const Header = () => {
 
           <div className="hidden lg:flex items-center gap-6 ml-8">
             <div className="flex items-center gap-2 text-white cursor-pointer hover:text-gray-300">
-              <img src={earth} alt="lang" className="w-5" />
-              <span>Italian</span>
-              <img src={arrow} alt="arr" className="w-3" />
+              <img src={earth} alt="lang" className="w-8" />
+              <span className='text-2xl'>Italian</span>
+              <img src={arrow} alt="arr" className="w-4" />
             </div>
 
             {isAuth ? (
               <div className="flex items-center gap-4">
-                <span className="text-white">Привет, {user?.name}</span>
+                <Link to={dashboardPath} className="text-white hover:text-orange-500 transition cursor-pointer">
+                    Ciao, {user?.name}
+                </Link>
                 <button 
                   onClick={() => dispatch(logout())}
                   className="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 transition"
                 >
-                  Выйти
+                  Esci
                 </button>
               </div>
             ) : (
               <button 
-                onClick={() => setIsLogInModalOpen(true)}
-                className="bg-orange-500 text-white px-8 py-2 rounded hover:bg-orange-600 transition font-medium"
-              >
+                onClick={() => dispatch(openLoginModal())}
+                className='text-white bg-[#FF7420] px-7 py-3 text-2xl rounded-2xl transition'>
                 Log in
               </button>
             )}
@@ -124,8 +131,6 @@ export const Header = () => {
           />
         )}
       </div>
-
-      {isLogInModalOpen && <LogInModal onClose={() => setIsLogInModalOpen(false)} />}
     </div>
   );
 };

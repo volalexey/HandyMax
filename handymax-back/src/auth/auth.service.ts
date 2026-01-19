@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { PrismaService } from '../prisma/prisma.service';
@@ -14,7 +14,7 @@ export class AuthService {
   ) {}
 
   async signup(createAuthDto: CreateAuthDto) {
-    const { email, password, name } = createAuthDto;
+    const { email, password, name, phone } = createAuthDto;
 
     const existingUser = await this.prisma.user.findUnique({
       where: { email },
@@ -25,8 +25,13 @@ export class AuthService {
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
-
-    const newUser = await this.prisma.user.create({data: {email, password: hashPassword, name}});
+    const data = {
+      email,
+      password: hashPassword,
+      name,
+      phone: phone ? phone : null
+    };
+    const newUser = await this.prisma.user.create({data});
 
     return { message: 'User created successfully', user: newUser };
   }
@@ -47,7 +52,8 @@ export class AuthService {
       user: {
         id: user?.id,
         email: user.email,
-        name: user.name
+        name: user.name,
+        role: user.role
       }
     };
   }
@@ -64,8 +70,27 @@ export class AuthService {
     return `This action returns a #${id} auth`;
   }
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
+  async getMe(userId: number) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const { password, ...result } = user;
+    return result;
+  }
+
+  async update(id: number, data: any) { 
+    
+    return this.prisma.user.update({
+      where: { id },
+      data: {
+        ...data,
+      },
+    });
   }
 
   remove(id: number) {

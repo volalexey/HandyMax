@@ -52,4 +52,11 @@ export class ReviewsService {
   remove(id: number) {
     return this.prisma.review.delete({ where: { id } });
   }
+
+  async approve(id: number) {
+    return this.prisma.review.update({
+      where: { id },
+      data: { isApproved: true },
+    })
+  }
 }

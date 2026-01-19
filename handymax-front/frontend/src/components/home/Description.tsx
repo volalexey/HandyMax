@@ -37,7 +37,7 @@ export const Description = ({ title, background }: DescriptionProps) => {
               Benvenuto!
             </h3>
 
-            <p className="text-lg lg:text-xl mb-10 leading-relaxed opacity-90">
+            <p className="text-lg lg:text-lg mb-10 leading-relaxed opacity-90">
               Mi chiamo Maxim, sono il tuo tuttofare affidabile ad Avellino e quartieri.
               Dalle piccole riparazioni e montaggio di mobili agli
               elettrodomestici e all'impianto idraulico, mi occupo
@@ -53,13 +53,13 @@ export const Description = ({ title, background }: DescriptionProps) => {
                 { img: listLogo4, text: "Approccio umano - come se lo facessi per me stesso" },
               ].map((item, index) => (
                 <li key={index} className="flex items-center gap-4 uppercase font-medium text-sm lg:text-base">
-                  <img src={item.img} alt="icon" className="w-8 h-8 object-contain flex-shrink-0" />
+                  <img src={item.img} alt="icon" className="w-13 h-13 object-contain flex-shrink-0" />
                   <span>{item.text}</span>
                 </li>
               ))}
             </ul>
 
-            <button className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 rounded transition-colors w-full lg:w-[190px] text-xl">
+            <button className="bg-orange-500 hover:bg-orange-600 text-white font-medium py-4 rounded-xl transition-colors w-full lg:w-[190px] text-xl">
               Ordina ora
             </button>
           </div>

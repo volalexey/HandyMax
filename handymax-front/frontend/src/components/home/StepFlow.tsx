@@ -7,7 +7,7 @@ const steps = [
 
 export const StepFlow = () => {
   return (
-    <section className="bg-[#191A19] text-white py-12 lg:py-20 mb-20">
+    <section className="bg-[#191A19] text-white pt-10 pb-20 lg:pt-10 mb-20">
       <div className="container mx-auto px-4">
         
         <h2 className="text-[2.25rem] lg:text-[3rem] font-bold uppercase mb-10 text-center lg:text-left">
@@ -20,7 +20,7 @@ export const StepFlow = () => {
           {steps.map((item, index) => (
             <div key={index} className="relative flex flex-col items-start lg:items-center gap-2 lg:w-1/4">
               
-              <h3 className="text-2xl font-bold lg:text-center">
+              <h3 className="text-2xl font-medium lg:text-center">
                 {item.title}
               </h3>
               

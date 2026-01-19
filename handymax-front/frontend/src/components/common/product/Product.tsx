@@ -1,46 +1,50 @@
-import { HashLink } from 'react-router-hash-link';
-import { Link } from 'react-router-dom';
+import { NavLink } from "react-router-dom";
 
 interface ProductProps {
   img: string;
   title: string;
   text: string;
   price: string;
-  buttonText?: string;
-  link?: string;
+  link: string;
 }
 
-export const Product = ({ img, title, text, price, buttonText = "Ordina ora", link }: ProductProps) => {
-  
-  const buttonClasses = "w-full block py-3 border-2 border-[#191A19] text-[#191A19] font-bold uppercase rounded hover:bg-[#191A19] hover:text-white transition-colors text-center";
-
+export const Product = ({ img, title, text, price, link }: ProductProps) => {
   return (
-    <div className="flex flex-col gap-4 max-w-[350px] mx-auto w-full">
+    <div className="flex flex-col w-full h-full gap-4 group">
       
-      <img src={img} alt={title} className="w-full h-auto rounded-lg object-cover shadow-md" />
-      
-      <h3 className="text-xl font-bold uppercase min-h-[3rem] line-clamp-2">
-        {title}
-      </h3>
-      
-      <p className="text-gray-500 text-sm line-clamp-3 min-h-[4.5rem]">
-        {text}
-      </p>
-      
-      <div className="text-2xl font-bold text-[#191A19]">
-        €{price}
+      <div className="w-full aspect-[4/3] rounded-[20px] overflow-hidden relative bg-gray-100">
+        <img 
+          src={img} 
+          alt={title} 
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
       </div>
-      
-      {link ? (
-        <Link to={link} className={buttonClasses}>
-          {buttonText}
-        </Link>
-      ) : (
-        <HashLink smooth to="/#contacts" className={buttonClasses}>
-          {buttonText}
-        </HashLink>
-      )}
 
+      <div className="flex flex-col flex-grow gap-2">
+        
+        <h3 className="text-[1.125rem] font-bold leading-tight line-clamp-2">
+          {title}
+        </h3>
+
+        <p className="text-[#6C757D] text-sm leading-relaxed line-clamp-3">
+          {text}
+        </p>
+        
+        <div className="mt-auto pt-2 flex flex-col gap-3">
+          
+          <p className="text-[1.125rem] font-bold text-black">
+            Prezzo - da €{price}
+          </p>
+
+          <NavLink 
+            to={link}
+            className="w-fit px-8 py-2.5 bg-orange-500 text-white rounded-lg font-bold uppercase text-sm hover:bg-orange-600 transition-colors text-center"
+          >
+            Ordina ora
+          </NavLink>
+        </div>
+
+      </div>
     </div>
   );
 };

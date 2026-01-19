@@ -27,6 +27,12 @@ export class ReviewsController {
     return this.reviewsService.findAll();
   }
 
+  @Patch(':id/approve')
+  @UseGuards(AuthGuard('jwt'))
+  approve(@Param('id') id: string) {
+    return this.reviewsService.approve(+id);
+  }
+
   @Patch(':id')
   @UseGuards(AuthGuard('jwt'))
   update(@Param('id') id: string, @Body() updateReviewDto: UpdateReviewDto) {

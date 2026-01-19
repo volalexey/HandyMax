@@ -4,9 +4,10 @@ interface AdminPanelRecommendationProps {
   title: string;
   img: string;
   id: string;
+  onDelete: (id: string) => void;
 }
 
-export const AdminPanelRecommendation = ({ title, img, id }: AdminPanelRecommendationProps) => {
+export const AdminPanelRecommendation = ({ title, img, id, onDelete }: AdminPanelRecommendationProps) => {
   return (
     <div className="flex flex-col gap-3 items-center w-full max-w-[230px]">
       
@@ -15,7 +16,7 @@ export const AdminPanelRecommendation = ({ title, img, id }: AdminPanelRecommend
       </h2>
 
       <div className="border-[2.14px] border-[#ADB5BD] p-[15px_20px] mb-[15px] w-full">
-        <img src={img} alt="recommendation" className="w-full h-auto object-contain" />
+        <img src={img} alt="recommendation" className="w-full h-auto object-contain aspect-square" />
       </div>
 
       <div className="flex flex-col gap-3 w-full">
@@ -27,7 +28,10 @@ export const AdminPanelRecommendation = ({ title, img, id }: AdminPanelRecommend
           View article
         </NavLink>
         
-        <button className="w-full h-[55px] bg-[#191A19] text-white rounded-xl font-medium hover:bg-black transition">
+        <button 
+          onClick={() => onDelete(id)}
+          className="w-full h-[55px] bg-[#191A19] text-white rounded-xl font-medium hover:bg-black transition"
+        >
           Remove
         </button>
 

@@ -20,20 +20,12 @@ export const NavigationPanel = ({ isFullScreenNavOpen, setIsFullScreenNavOpen }:
     <>
       <aside className={`
         bg-white rounded-[20px] shadow-[0px_0px_20px_0px_rgba(0,0,0,0.15)] 
-        relative pt-[90px] pb-[30px] px-[20px] lg:px-[40px] flex flex-col gap-[30px]
+        relative pt-[50px] pb-[30px] px-[20px] lg:px-[40px] flex flex-col gap-[30px]
         
-        /* Mobile logic based on isFullScreenNavOpen */
         ${isFullScreenNavOpen ? 'flex h-[80vh] w-full' : 'hidden'}
         
-        /* Desktop logic (всегда показываем как сайдбар) */
         lg:flex lg:h-[70vh] lg:w-full lg:relative
       `}>
-        
-        <img 
-          src={profile} 
-          alt="profile" 
-          className="absolute -top-[25px] left-1/2 -translate-x-1/2 w-[120px] lg:w-auto"
-        />
 
         <nav className="flex flex-col gap-[30px] items-center lg:items-start mt-4 lg:mt-0">
           

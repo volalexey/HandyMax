@@ -28,6 +28,14 @@ model User {
   password  String
   name      String
   phone     String?
+
+  description String? 
+  avatarUrl   String?
+  workingHours String?
+  contactEmail String?
+  city         String?
+  address      String?
+
   role      Role     @default(USER)
   createdAt DateTime @default(now())
 
@@ -58,7 +66,7 @@ model Review {
   user       User     @relation(fields: [userId], references: [id])
 
   serviceId  Int
-  service    Service  @relation(fields: [serviceId], references: [id])
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 }
 
 model Order {
@@ -80,10 +88,10 @@ model OrderItem {
   price     Float   // Цена услуги на момент заказа (вдруг потом подорожает)
   
   orderId   Int
-  order     Order   @relation(fields: [orderId], references: [id])
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   
   serviceId Int
-  service   Service @relation(fields: [serviceId], references: [id])
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 }
 
 // Блог / Рекомендации
@@ -103,4 +111,14 @@ model UrgentRequest {
   description String?
   isProcessed Boolean  @default(false)
   createdAt   DateTime @default(now())
+
+  workType    String?
+  arrivalTime String?
+  imageUrl String?
+}
+
+model PortfolioItem {
+  id        Int      @id @default(autoincrement())
+  imageUrl  String   // Ссылка на фото в Supabase
+  createdAt DateTime @default(now())
 }

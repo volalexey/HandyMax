@@ -15,6 +15,7 @@ export type Review = {
 type Props = {
   reviews: Review[];
   onDelete?: (id: string) => void;
+  onApprove?: (id: string) => void;
   className?: string;
   isButtons?: boolean;
 };
@@ -32,7 +33,7 @@ function Stars({ value }: { value: number }) {
   );
 }
 
-export const ReviewsCarousel = ({ reviews, onDelete, className = '', isButtons }: Props) => {
+export const ReviewsCarousel = ({ reviews, onDelete, onApprove, className = '', isButtons }: Props) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: 'left' | 'right') => {
@@ -75,12 +76,14 @@ export const ReviewsCarousel = ({ reviews, onDelete, className = '', isButtons }
             <div className="relative bg-[#141414] text-white rounded-[18px] p-[20px_20px_22px] 
                             min-h-[170px] shadow-[0_2px_10px_rgba(0,0,0,0.15)] flex flex-col justify-between h-full">
               
-              <img 
-                onClick={() => onDelete?.(r.id)}
-                src={trash} 
-                alt="delete" 
-                className="absolute top-[18px] right-[18px] w-[32px] h-[32px] cursor-pointer hover:scale-110 transition-transform"
-              />
+              {!isButtons && (
+                <img 
+                  onClick={() => onDelete?.(r.id)}
+                  src={trash} 
+                  alt="delete" 
+                  className="absolute top-[18px] right-[18px] w-[32px] h-[32px] cursor-pointer hover:scale-110 transition-transform"
+                />
+              )}
 
               <div className="grid grid-cols-[56px_1fr] gap-[14px] items-center mb-[12px]">
                 <div className="w-[56px] h-[56px] rounded-full grid place-items-center 
@@ -101,10 +104,17 @@ export const ReviewsCarousel = ({ reviews, onDelete, className = '', isButtons }
 
               {isButtons && (
                 <div className="flex gap-[10px] mt-[12px]">
-                  <button className="w-full h-[40px] bg-orange-500 rounded-[12px] text-sm font-bold hover:bg-orange-600 transition">
+                  <button 
+                    onClick={() => onApprove?.(r.id)}
+                    className="w-full h-[40px] bg-orange-500 rounded-[12px] text-sm font-bold hover:bg-orange-600 transition"
+                  >
                     Publish
                   </button>
-                  <button className="w-full h-[40px] bg-[#191A19] border border-gray-700 rounded-[12px] text-sm font-bold hover:bg-black transition">
+                  
+                  <button 
+                    onClick={() => onDelete?.(r.id)}
+                    className="w-full h-[40px] bg-[#191A19] border border-gray-700 rounded-[12px] text-sm font-bold hover:bg-black transition"
+                  >
                     Remove
                   </button>
                 </div>

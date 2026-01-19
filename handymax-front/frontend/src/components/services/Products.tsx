@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Product } from '../../components/common/product/Product';
+import { Product } from '../../components/common/product/Product'; // Проверь путь
 import { Calculator } from './Calculator';
 import service1 from '../../assets/img/services1.png'; 
 
@@ -7,7 +7,8 @@ const productsData = Array(6).fill({
   title: "Installazione di bastoni per tende, mensole, TV",
   text: "Fissaggio a parete di oggetti d'arredo tenendo conto del tipo di superficie e del peso",
   price: "50",
-  img: service1
+  img: service1,
+  link: "/order"
 });
 
 export const Products = () => {
@@ -30,10 +31,15 @@ export const Products = () => {
       <div className="flex gap-8 relative items-start">
         
         <div className={`
-           grid gap-8 w-full transition-all duration-300
-           ${isCalculatorOpen ? 'lg:w-[calc(100%-420px)] blur-sm lg:blur-0 pointer-events-none lg:pointer-events-auto' : ''}
-           grid-cols-1 md:grid-cols-2 lg:grid-cols-3
-           ${isCalculatorOpen ? 'xl:grid-cols-2' : ''} 
+           grid gap-x-6 gap-y-12 w-full transition-all duration-300
+           
+           /* Мобилка: 1 колонка, Планшет: 2 колонки */
+           grid-cols-1 sm:grid-cols-2 
+
+           /* Десктопная логика */
+           ${isCalculatorOpen 
+             ? 'lg:w-[calc(100%-420px)] lg:grid-cols-3 blur-sm lg:blur-0 pointer-events-none lg:pointer-events-auto' 
+             : 'lg:grid-cols-4'}
         `}>
           {productsData.map((item, idx) => (
             <Product key={idx} {...item} />

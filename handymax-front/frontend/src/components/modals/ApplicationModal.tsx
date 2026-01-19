@@ -64,24 +64,24 @@ export const ApplicationModal = ({ onClose }: ApplicationModalProps) => {
           <input 
             type="text" 
             placeholder="Name" 
-            className="w-full h-[70px] lg:h-[40px] px-4 rounded text-black outline-none focus:ring-4 focus:ring-black/20 transition"
+            className="w-full h-[70px] lg:h-[40px] px-4 py-7 rounded-xl text-black outline-none focus:ring-4 focus:ring-black/20 transition"
           />
           
           <input 
             type="email" 
             placeholder="Email" 
-            className="w-full h-[70px] lg:h-[40px] px-4 rounded text-black outline-none focus:ring-4 focus:ring-black/20 transition"
+            className="w-full h-[70px] lg:h-[40px] px-4 py-7 rounded-xl text-black outline-none focus:ring-4 focus:ring-black/20 transition"
           />
           
           <input 
             type="tel" 
             placeholder="Phone" 
-            className="w-full h-[70px] lg:h-[40px] px-4 rounded text-black outline-none focus:ring-4 focus:ring-black/20 transition"
+            className="w-full h-[70px] lg:h-[40px] px-4 py-7 rounded-xl text-black outline-none focus:ring-4 focus:ring-black/20 transition"
           />
           
           <textarea 
             placeholder="Descrivi il problema"
-            className="w-full h-[130px] lg:h-[100px] p-4 rounded text-black outline-none focus:ring-4 focus:ring-black/20 transition resize-none"
+            className="w-full h-[130px] lg:h-[100px] p-4 rounded-xl text-black outline-none focus:ring-4 focus:ring-black/20 transition resize-none"
           />
 
           <input 

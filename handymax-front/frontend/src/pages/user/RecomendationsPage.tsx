@@ -1,7 +1,9 @@
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useNavigate } from "react-router-dom";
 import { Recommendation } from "../../components/userPanel/recommendation/Recommendation";
-import recommendationImg from "../../assets/img/recommendation1.png";
+import { useGetRecommendationsQuery } from "../../store/api/recommendationsApi";
+
 import arrowGrey from "../../assets/img/arrowGrey.svg";
+import defaultImg from "../../assets/img/recommendation1.png";
 
 type UserLayoutContextType = {
   isFullScreenNavOpen: boolean;
@@ -10,6 +12,9 @@ type UserLayoutContextType = {
 
 export const RecommendationsPage = () => {
   const { isFullScreenNavOpen, setIsFullScreenNavOpen } = useOutletContext<UserLayoutContextType>();
+
+  const { data: recommendations, isLoading } = useGetRecommendationsQuery();
+  const navigate = useNavigate();
 
   return (
     <div className={`
@@ -34,24 +39,31 @@ export const RecommendationsPage = () => {
         Consigli e suggerimenti
       </h2>
 
-      <div className="grid grid-cols-2 md:grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-[50px] mt-[25px] justify-center">
+      <div className="grid gap-[30px] mt-[25px] w-full
+                      grid-cols-1        
+                      sm:grid-cols-2  
+                      lg:grid-cols-3 
+                      xl:grid-cols-3  
+      ">
         
-        <Recommendation 
-          name="Titolo del video o dell'articolo" 
-          img={recommendationImg} 
-        />
-        <Recommendation 
-          name="Titolo del video o dell'articolo" 
-          img={recommendationImg} 
-        />
-        <Recommendation 
-          name="Titolo del video o dell'articolo" 
-          img={recommendationImg} 
-        />
-        <Recommendation 
-          name="Titolo del video o dell'articolo" 
-          img={recommendationImg} 
-        />
+        {isLoading && <div className="col-span-full text-center text-gray-400">Caricamento...</div>}
+
+        {!isLoading && recommendations?.map((article) => (
+          <div 
+            key={article.id} 
+            onClick={() => navigate(`/user-panel/recommendations/${article.id}`)}
+            className="block h-full cursor-pointer hover:opacity-90 transition-opacity"
+          >
+            <Recommendation 
+              name={article.title} 
+              img={article.imageUrl || defaultImg} 
+            />
+          </div>
+        ))}
+
+        {!isLoading && recommendations?.length === 0 && (
+           <div className="col-span-full text-center text-gray-400">Nessun articolo trovato.</div>
+        )}
 
       </div>
 
